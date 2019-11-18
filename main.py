@@ -10,20 +10,14 @@ for line in src:
     line = line.split(' ')
     spravochnik.append({"first_name": line[0],
                         "last_name": line[1],
-                        "phone": line[2]})
+                        "phone_number": line[2]})
 source_file.close()
 
 
 def printer(source):
     print()
     for person in source:
-        print(person['first_name'] + " " + person['last_name'] + " " + person['phone'], end='')
-    print('\n')
-
-def show():
-    print()
-    for person in spravochnik:
-        printer(spravochnik)
+        print(person['first_name'] + " " + person['last_name'] + " " + person['phone_number'], end='')
     print('\n')
 
 
@@ -43,21 +37,61 @@ def finder():
     print("Last name")
     print("Full name")
     print("Phone number")
+    print("..or exit..")
+    out_people = list()
     while True:
         command = input()
-        if command == 'First name' or command == 'Last name'or command == 'Full name' or command == 'Phone number':
-            print(command + ": ", end='')
-            command = command.lower().replace(' ', '_')
-            out_people = list()
+        if command == 'exit':
+            break
+        if command == 'First name':
+            print('First name: ', end='')
             val = input()
             for person in spravochnik:
-                if person[command] == val:
+                if person['first_name'] == val:
                     out_people.append(person)
-            if len(out_people) == 0:
-                print('Sorry. No such person in the spravochnik')
-            else:
+            if len(out_people) != 0:
+                print('Here are the variants:')
                 printer(out_people)
+            else:
+                print('Sorry, no matches')
             break
+        if command == 'Last name':
+            print('Last name: ', end='')
+            val = input()
+            for person in spravochnik:
+                if person['last_name'] == val:
+                    out_people.append(person)
+            if len(out_people) != 0:
+                print('Here are the variants:')
+                printer(out_people)
+            else:
+                print('Sorry, no matches')
+            break
+        if command == 'Full name':
+            print('Full name: ', end='')
+            val = input().split()
+            for person in spravochnik:
+                if person['first_name'] == val[0] and person['last_name'] == val[1]:
+                    out_people.append(person)
+            if len(out_people) != 0:
+                print('Here are the variants:')
+                printer(out_people)
+            else:
+                print('Sorry, no matches')
+            break
+        if command == 'Phone number':
+            print('Phone number: ', end='')
+            val = input()
+            for person in spravochnik:
+                if person['phone_number'] == val:
+                    out_people.append(person)
+            if len(out_people) != 0:
+                print('Here are the variants:')
+                printer(out_people)
+            else:
+                print('Sorry, no matches')
+            break
+
         print('No such option. Try again.')
 
 
@@ -85,7 +119,7 @@ def adder():
             if command == 'tel':
                 print("please enter the new value:")
                 new_tel = input()
-                spravochnik[check[1]]['phone'] = new_tel
+                spravochnik[check[1]]['phone_number'] = new_tel
                 return
         elif command == 'skip':
             return
@@ -97,7 +131,7 @@ def adder():
         phone = raw_phone
     spravochnik.append({"first_name": first_name,
                         "last_name": last_name,
-                        "phone": phone})
+                        "phone_number": phone})
 
 
 def main():
@@ -112,8 +146,8 @@ def main():
             print("adding...")
             adder()
         elif command == 'show':
-            print("Let's have a look!")
-            show()
+            print("Have a look!")
+            printer(spravochnik)
         elif command == "find":
             print("Let's have a look..")
             finder()
