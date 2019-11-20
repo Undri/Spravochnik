@@ -14,6 +14,7 @@ for line in src:
 source_file.close()
 
 
+# function to print the whole spravochnik
 def printer(source):
     print()
     for person in source:
@@ -22,6 +23,7 @@ def printer(source):
 
 
 # checks whether a person is already in the spravochnik
+# returns the index of a person, if in spravochnik
 def full_name_checker(first_name, last_name):
     i = 0
     for person in spravochnik:
@@ -30,15 +32,55 @@ def full_name_checker(first_name, last_name):
         i += 1
 
 
+def changer(found_person):
+    while True:
+        print('Options:')
+        print('change/exit')
+        command = input()
+        if command == 'exit':
+            return
+        if command == 'change':
+            while True:
+                print('What to change?')
+                print('Options:')
+                print('First name')
+                print('Last name')
+                print('Phone number')
+                print('exit')
+                command = input()
+                if command == 'exit':
+                    break
+                if command == 'First name':
+                    print('Print new name: ', end=' ')
+                    val = input()
+                    i = full_name_checker(found_person['first_name'], found_person['last_name'])[1]
+                    spravochnik[i]['first_name'] = val
+                    print('Done!')
+                if command == 'Last name':
+                    print('Print new last name: ', end=' ')
+                    val = input()
+                    i = full_name_checker(found_person['first_name'], found_person['last_name'])[1]
+                    spravochnik[i]['last_name'] = val
+                    print('Done')
+                if command == 'Phone number':
+                    print('Print new phone number: ', end=' ')
+                    val = input()
+                    if val[0] == '+':
+                        val = '8' + val[2:]
+                    i = full_name_checker(found_person['first_name'], found_person['last_name'])[1]
+                    spravochnik[i]['phone_number'] = val
+                    print('Done')
+
+
+# function allows to find a certain person using options
 def finder():
-    command = ''
     print("Find by:")
     print("First name")
     print("Last name")
     print("Full name")
     print("Phone number")
     print("..or exit..")
-    out_people = list()
+    found_people = list()
     while True:
         command = input()
         if command == 'exit':
@@ -48,22 +90,25 @@ def finder():
             val = input()
             for person in spravochnik:
                 if person['first_name'] == val:
-                    out_people.append(person)
-            if len(out_people) != 0:
+                    found_people.append(person)
+            if len(found_people) != 0:
                 print('Here are the variants:')
-                printer(out_people)
+                printer(found_people)
+                changer(found_people)
             else:
-                print('Sorry, no matches')
+                print('Sorry, no matches, try again?')
             break
+
         if command == 'Last name':
             print('Last name: ', end='')
             val = input()
             for person in spravochnik:
                 if person['last_name'] == val:
-                    out_people.append(person)
-            if len(out_people) != 0:
+                    found_people.append(person)
+            if len(found_people) != 0:
                 print('Here are the variants:')
-                printer(out_people)
+                printer(found_people)
+                changer(found_people)
             else:
                 print('Sorry, no matches')
             break
@@ -72,10 +117,11 @@ def finder():
             val = input().split()
             for person in spravochnik:
                 if person['first_name'] == val[0] and person['last_name'] == val[1]:
-                    out_people.append(person)
-            if len(out_people) != 0:
+                    found_people.append(person)
+            if len(found_people) != 0:
                 print('Here are the variants:')
-                printer(out_people)
+                printer(found_people)
+                changer(found_people)
             else:
                 print('Sorry, no matches')
             break
@@ -84,10 +130,11 @@ def finder():
             val = input()
             for person in spravochnik:
                 if person['phone_number'] == val:
-                    out_people.append(person)
-            if len(out_people) != 0:
+                    found_people.append(person)
+            if len(found_people) != 0:
                 print('Here are the variants:')
-                printer(out_people)
+                printer(found_people)
+                changer(found_people)
             else:
                 print('Sorry, no matches')
             break
@@ -95,17 +142,16 @@ def finder():
         print('No such option. Try again.')
 
 
-# function to add a new person to spravochnik
-# also can handle the situations, when a person is
-# already in spravochnik
+# function allows to add a new person to spravochnik
+# handles the situations, when a person is already in spravochnik
 def adder():
-    print("Name")
+    print("Name: ")
     first_name = input()
-    print("Last Name")
+    print("Last Name: ")
     last_name = input()
     check = full_name_checker(first_name, last_name)
     if check[0] == -1:
-        print("Hey..wait a minute, such person already in the list!")
+        print("Hey..wait a minute, such person is already in the list!")
         print("You wanna change info or skip?")
         command = 0
         while command != "change" or command != "skip":
@@ -123,7 +169,7 @@ def adder():
                 return
         elif command == 'skip':
             return
-    print("Phone")
+    print("Phone: ")
     raw_phone = input()
     if raw_phone[0] == '+':
         phone = '8' + raw_phone[2:]
