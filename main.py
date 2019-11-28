@@ -1,21 +1,5 @@
 from prettytable import PrettyTable
 
-# our spravochnik
-spravochnik = list()
-
-# getting the content that is already in spravochnik file
-# and putting it to our "virtual" spravochnik list()
-
-source_file = open("dict.txt", "r")
-src = source_file.readlines()
-for line in src:
-    line = line.split(' ')
-    spravochnik.append({"first_name": line[0],
-                        "last_name": line[1],
-                        "phone_number": line[2],
-                        'birth_date': line[3]})
-source_file.close()
-
 
 # function to print the whole spravochnik
 def printer(source):
@@ -103,6 +87,8 @@ def changer(found_people):
                 i = full_name_checker(found_person['first_name'], found_person['last_name'])
                 spravochnik[i[1]]['birth_date'] = val
                 print('Done')
+
+    spravochnik.sort(key=lambda p: p['last_name'])
 
 
 # function allows to find a certain person using options
@@ -232,6 +218,23 @@ def adder():
 
 
 def main():
+    # our spravochnik
+    spravochnik = list()
+
+    # getting the content that is already in spravochnik file
+    # and putting it to our "virtual" spravochnik list()
+
+    source_file = open("dict.txt", "r")
+    src = source_file.readlines()
+    for line in src:
+        line = line.split(' ')
+        spravochnik.append({"first_name": line[0],
+                            "last_name": line[1],
+                            "phone_number": line[2],
+                            'birth_date': line[3].replace('\n', '')})
+    source_file.close()
+    spravochnik.sort(key=lambda p: p['last_name'])
+
     print("Welcome!\n")
     while True:
         print("Available commands: ")
@@ -258,4 +261,5 @@ def main():
     file.close()
 
 
-main()
+if __name__ == '__main__':
+    main()
