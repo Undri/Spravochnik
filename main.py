@@ -1,4 +1,6 @@
 from prettytable import PrettyTable
+# our spravochnik
+spravochnik = list()
 
 
 # function to print the whole spravochnik
@@ -218,12 +220,8 @@ def adder():
 
 
 def main():
-    # our spravochnik
-    spravochnik = list()
-
     # getting the content that is already in spravochnik file
     # and putting it to our "virtual" spravochnik list()
-
     source_file = open("dict.txt", "r")
     src = source_file.readlines()
     for line in src:
@@ -257,7 +255,7 @@ def main():
 
     file = open('dict.txt', 'w')
     for person in spravochnik:
-        file.write(" ".join(person.values()))
+        file.write(" ".join(person.values()) + "\n")
     file.close()
 
 
