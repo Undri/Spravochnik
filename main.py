@@ -1,3 +1,5 @@
+from prettytable import PrettyTable
+
 # our spravochnik
 spravochnik = list()
 
@@ -21,10 +23,13 @@ def printer(source):
         print('It is empty!')
         return
     print()
+    t = PrettyTable()
+    t.field_names = [' ', 'First name', 'Last name', 'Phone number', 'Birth date']
     i = 1
     for person in source:
-        print(str(i) + ". " + person['first_name'] + " " + person['last_name'] + " " + person['phone_number'] + " " + person['birth_date'], end='')
-    print('\n')
+        t.add_row([str(i) + '.', person['first_name'], person['last_name'], person['phone_number'], person['birth_date']])
+        i = i + 1
+    print(t)
 
 
 # checks whether a person is already in the spravochnik
@@ -39,69 +44,65 @@ def full_name_checker(first_name, last_name):
         i += 1
 
 
-def changer(found_person):
+def changer(found_people):
     print('Do you want to change anything?')
     print('YES/NO')
     val = input()
     if val == 'YES':
-        if len(found_person) > 1:
+        found_person = {}
+        if len(found_people) > 1:
             while True:
                 print('Whose information do you want to change (print the number): ')
-                for x in range(len(found_person)):
-                    print(x, end=' ')
+                for x in range(len(found_people)):
+                    print(x + 1, end=' ')
                 print('or exit')
                 val = int(input())
                 if val == 'exit':
                     break
-                elif 1 <= val <= len(found_person):
-                    found_person = found_person[val]
+                elif 1 <= val <= len(found_people):
+                    found_person = found_people[val]
                     break
-                elif val > len(found_person):
+                elif val > len(found_people):
                     print('Try another number')
+        else:
+            found_person = found_people[0]
         while True:
+            print('What to change?')
             print('Options:')
-            print('change/exit')
+            print('First name')
+            print('Last name')
+            print('Phone number')
+            print('Birth date')
+            print('exit')
             command = input()
             if command == 'exit':
-                return
-            if command == 'change':
-                while True:
-                    print('What to change?')
-                    print('Options:')
-                    print('First name')
-                    print('Last name')
-                    print('Phone number')
-                    print('Birth date')
-                    print('exit')
-                    command = input()
-                    if command == 'exit':
-                        break
-                    if command == 'First name':
-                        print('Print new name: ', end=' ')
-                        val = input()
-                        i = full_name_checker(found_person['first_name'], found_person['last_name'])[1]
-                        spravochnik[i]['first_name'] = val
-                        print('Done!')
-                    if command == 'Last name':
-                        print('Print new last name: ', end=' ')
-                        val = input()
-                        i = full_name_checker(found_person['first_name'], found_person['last_name'])[1]
-                        spravochnik[i]['last_name'] = val
-                        print('Done')
-                    if command == 'Phone number':
-                        print('Print new phone number: ', end=' ')
-                        val = input()
-                        if val[0] == '+':
-                            val = '8' + val[2:]
-                        i = full_name_checker(found_person['first_name'], found_person['last_name'])[1]
-                        spravochnik[i]['phone_number'] = val
-                        print('Done')
-                    if command == 'Birth date':
-                        print('Print new birth date: ', end=' ')
-                        val = input()
-                        i = full_name_checker(found_person['first_name'], found_person['last_name'])[1]
-                        spravochnik[i]['birth_date'] = val
-                        print('Done')
+                break
+            if command == 'First name':
+                print('Print new name: ', end=' ')
+                val = input()
+                i = full_name_checker(found_person['first_name'], found_person['last_name'])
+                spravochnik[i[1]]['first_name'] = val
+                print('Done!')
+            if command == 'Last name':
+                print('Print new last name: ', end=' ')
+                val = input()
+                i = full_name_checker(found_person['first_name'], found_person['last_name'])
+                spravochnik[i[1]]['last_name'] = val
+                print('Done')
+            if command == 'Phone number':
+                print('Print new phone number: ', end=' ')
+                val = input()
+                if val[0] == '+':
+                    val = '8' + val[2:]
+                i = full_name_checker(found_person['first_name'], found_person['last_name'])
+                spravochnik[i[1]]['phone_number'] = val
+                print('Done')
+            if command == 'Birth date':
+                print('Print new birth date: ', end=' ')
+                val = input()
+                i = full_name_checker(found_person['first_name'], found_person['last_name'])
+                spravochnik[i[1]]['birth_date'] = val
+                print('Done')
 
 
 # function allows to find a certain person using options
@@ -231,10 +232,11 @@ def adder():
 
 
 def main():
+    print("Welcome!\n")
     while True:
-        print("\nAvailable commands: ")
-        print("add/show/exit/find")
-        print("Waiting for commands...")
+        print("Available commands: ")
+        print("add/show/exit/find\n")
+
         command = input()
         if command == 'exit':
             break
