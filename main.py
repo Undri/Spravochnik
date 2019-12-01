@@ -1,4 +1,5 @@
 from prettytable import PrettyTable
+import datetime
 # our spravochnik
 spravochnik = list()
 
@@ -28,6 +29,7 @@ def full_name_checker(first_name, last_name):
         if person.get('first_name') == first_name and person.get('last_name') == last_name:
             return -1, i
         i += 1
+    return 0, 0
 
 
 def changer(found_people):
@@ -177,6 +179,25 @@ def finder():
         print('No such option. Try again.')
 
 
+def phone_adder():
+    print("Phone number:", end=' ')
+    while True:
+        val = input()
+        if len(val) == 11:
+            if val[0] == '+':
+                val = '8' + val[2:]
+            return val
+        elif len(val) > 11:
+            print('Line too long')
+        elif len(val) < 11:
+            print('Line to short')
+
+
+def birth_adder():
+    print('Birth date(dd.mm.yyyy):', end=' ')
+
+
+
 # function allows to add a new person to spravochnik
 # handles the situations, when a person is already in spravochnik
 def adder():
@@ -195,21 +216,33 @@ def adder():
             command = input()
             if command == "change":
                 print("what do you want to change?")
-                print("Options: tel/..")
+                print("Options:\nFirst name\nLast name\nPhone number\nBirth date")
                 command = input()
-                if command == 'tel':
-                    print("please enter the new value:")
-                    new_tel = input()
-                    spravochnik[check[1]]['phone_number'] = new_tel
-                    return
+                while True:
+                    if command == 'exit':
+                        return
+                    if command == 'First name':
+                        print("please enter the new value:")
+                        val = input()
+                        spravochnik[check[1]]['first_name'] = val
+                        return
+                    if command == 'Last name':
+                        print("please enter the new value:")
+                        val = input()
+                        spravochnik[check[1]]['last_name'] = val
+                        return
+                    if command == 'Phone number':
+                        val = phone_adder()
+                        spravochnik[check[1]]['phone_number'] = val
+                    if command == 'Birth date':
+                        print("please enter the new value:")
+                        val = input()
+                        spravochnik[check[1]]['birth_date'] = val
+                        return
+                    print('Try again')
             elif command == 'skip':
                 return
-    print("Phone: ")
-    raw_phone = input()
-    if raw_phone[0] == '+':
-        phone = '8' + raw_phone[2:]
-    else:
-        phone = raw_phone
+    phone = phone_adder()
 
     print('Birth date: ')
     bd = input()
